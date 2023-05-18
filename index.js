@@ -33,7 +33,7 @@ app.use(cors());
 // Routes
 // app.use("/payments", authenticateJWT, productsRoutes);
 // app.use("/clients", authenticateJWT, salesRoutes);
-// app.use("/counter", authenticateJWT, countersRoutes);
+// app.use("/appointments", authenticateJWT, countersRoutes);
 // app.use("/category", authenticateJWT, categoriesRoutes);
 // app.use("/admin", adminsRoutes);
 app.use(express.static(__dirname));
