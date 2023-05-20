@@ -20,8 +20,9 @@ db.once("open", function () {
 });
 
 const clientRoutes = require("./routes/clientRoutes.js");
-const appointmentRoutes = require("./routes/appointmetRoutes.js");
+const appointmentRoutes = require("./routes/appointmentRoutes.js");
 const paymentRoutes = require("./routes/paymentRoutes.js");
+const firstAppointmentRoutes = require("./routes/firstAppointmentRoutes.js");
 
 // const countersRoutes = require("./routes/counterRoutes.js"); // do i need counters?
 
@@ -31,7 +32,8 @@ app.use(morgan("tiny"));
 app.use(cors());
 
 // Routes
-// app.use("/payments", authenticateJWT, productsRoutes);
+app.use("/firstAppointment", firstAppointmentRoutes);
+app.use("/clients", clientRoutes);
 // app.use("/clients", authenticateJWT, salesRoutes);
 // app.use("/appointments", authenticateJWT, countersRoutes);
 // app.use("/category", authenticateJWT, categoriesRoutes);

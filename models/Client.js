@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const clientSchema = new mongoose.Schema({
   firstName: {
@@ -58,7 +59,7 @@ const clientSchema = new mongoose.Schema({
 });
 
 // Method to generate a random password
-clientSchema.methods.generateRandomPassword = function () {
+clientSchema.statics.generateRandomPassword = function () {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   const passwordLength = 8;

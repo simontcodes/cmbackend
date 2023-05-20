@@ -10,8 +10,8 @@ const appointmentSchema = new mongoose.Schema({
     required: [true, "Date is required."],
   },
   typeOfAppointment: {
-    type: String,
-    enum: ["type 1", "type 2", "type 3"],
+    type: Number,
+    enum: [1, 2, 3],
     required: [true, "Type of appointment is required."],
   },
   client: {
