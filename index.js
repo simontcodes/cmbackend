@@ -19,10 +19,11 @@ db.once("open", function () {
   console.log("Connected to MongoDB");
 });
 
-const clientRoutes = require("./routes/clientRoutes.js");
-const appointmentRoutes = require("./routes/appointmentRoutes.js");
-const paymentRoutes = require("./routes/paymentRoutes.js");
-const firstAppointmentRoutes = require("./routes/firstAppointmentRoutes.js");
+const clientRoutes = require("./routes/dashboard/clientRoutes.js");
+const appointmentRoutes = require("./routes/dashboard/appointmentRoutes.js");
+const paymentRoutes = require("./routes/dashboard/paymentRoutes.js");
+const firstAppointmentRoutes = require("./routes/landing/firstAppointmentRoutes.js");
+const availableTimesRoutes = require("./routes/landing/availableTimesRoutes");
 
 // const countersRoutes = require("./routes/counterRoutes.js"); // do i need counters?
 
@@ -34,6 +35,7 @@ app.use(cors());
 // Routes
 app.use("/firstAppointment", firstAppointmentRoutes);
 app.use("/clients", clientRoutes);
+app.use("/availabletimes", availableTimesRoutes);
 // app.use("/clients", authenticateJWT, salesRoutes);
 // app.use("/appointments", authenticateJWT, countersRoutes);
 // app.use("/category", authenticateJWT, categoriesRoutes);

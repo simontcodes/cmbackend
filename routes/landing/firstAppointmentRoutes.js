@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const Client = require("../models/Client");
-const Appointment = require("../models/Appointment");
-const Payment = require("../models/Payment");
+const Client = require("../../models/Client");
+const Appointment = require("../../models/Appointment");
+const Payment = require("../../models/Payment");
 
 // Create a client, appointment, and payment
 router.post("/", async (req, res) => {

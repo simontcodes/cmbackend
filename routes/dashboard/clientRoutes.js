@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
-const Client = require("../models/Client");
+const Client = require("../../models/Client");
 
 // Create a new client
 router.post("/", async (req, res) => {
