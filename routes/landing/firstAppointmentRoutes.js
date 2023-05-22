@@ -6,9 +6,10 @@ const Payment = require("../../models/Payment");
 
 // Create a client, appointment, and payment
 router.post("/", async (req, res) => {
+  console.log(req.body);
   try {
     // Extract client data from the request body
-    const { firstName, lastName, phoneNumber, email } = req.body;
+    const { firstName, lastName, phoneNumber, email } = req.body[0];
 
     // Create a new client instance
     const client = new Client({
@@ -16,13 +17,14 @@ router.post("/", async (req, res) => {
       lastName,
       phoneNumber,
       email,
+      password: Client.generateRandomPassword(),
     });
 
     // Save the new client to the database
     const savedClient = await client.save(); // podria no guardar el client en una variable para no tener la clave
 
     // Extract payment data from the request body
-    const { amount, transactionNumber } = req.body;
+    const { amount, transactionNumber } = req.body[1];
 
     // Create a new payment instance
     const payment = new Payment({
@@ -35,7 +37,10 @@ router.post("/", async (req, res) => {
     const savedPayment = await payment.save();
 
     // Extract appointment data from the request body
-    const { time, date, typeOfAppointment } = req.body;
+    const { time, date, typeOfAppointment } = req.body[1];
+
+    // date = new Date(date);
+    // typeOfAppointment = parseInt(typeOfAppointment);
 
     // Create a new appointment instance
     const appointment = new Appointment({

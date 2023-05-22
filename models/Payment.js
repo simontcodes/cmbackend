@@ -5,18 +5,13 @@ const paymentSchema = new mongoose.Schema({
     type: Number,
     required: [true, "Amount is required."],
   },
+  transactionNumber: {
+    type: String,
+  },
   client: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Client",
     required: [true, "Client is required."],
-  },
-  appointment: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Appointment",
-    required: [true, "Appointment is required."],
-  },
-  transactionNumber: {
-    type: String,
   },
 });
 

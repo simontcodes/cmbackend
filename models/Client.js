@@ -13,14 +13,14 @@ const clientSchema = new mongoose.Schema({
   phoneNumber: {
     type: String,
     required: [true, "Phone number is required."],
-    validate: {
-      validator: function (value) {
-        // Validate phone number format (e.g., XXX-XXX-XXXX)
-        return /^\d{3}-\d{3}-\d{4}$/.test(value);
-      },
-      message:
-        "Invalid phone number format. Please provide in XXX-XXX-XXXX format.",
-    },
+    // validate: {
+    //   validator: function (value) {
+    //     // Validate phone number format (e.g., XXX-XXX-XXXX)
+    //     return /^\d{3}-\d{3}-\d{4}$/.test(value);
+    //   },
+    //   message:
+    //     "Invalid phone number format. Please provide in XXX-XXX-XXXX format.",
+    // },
   },
   email: {
     type: String,
