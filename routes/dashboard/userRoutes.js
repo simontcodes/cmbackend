@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
-const Client = require("../../models/Client");
+const User = require("../../models/User");
 
 // Create a new client
 router.post("/", async (req, res) => {
@@ -9,12 +9,12 @@ router.post("/", async (req, res) => {
     const { firstName, lastName, phoneNumber, email } = req.body;
 
     // Create a new client instance
-    const newClient = new Client({
+    const newClient = new User({
       firstName,
       lastName,
       phoneNumber,
       email,
-      password: Client.generateRandomPassword(),
+      password: User.generateRandomPassword(),
     });
 
     // Save the new client to the database

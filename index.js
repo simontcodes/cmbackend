@@ -19,7 +19,7 @@ db.once("open", function () {
   console.log("Connected to MongoDB");
 });
 
-const clientRoutes = require("./routes/dashboard/clientRoutes.js");
+const userRoutes = require("./routes/dashboard/userRoutes.js");
 const appointmentRoutes = require("./routes/dashboard/appointmentRoutes.js");
 const paymentRoutes = require("./routes/dashboard/paymentRoutes.js");
 const firstAppointmentRoutes = require("./routes/landing/firstAppointmentRoutes.js");
@@ -34,7 +34,7 @@ app.use(cors());
 
 // Routes
 app.use("/firstAppointment", firstAppointmentRoutes);
-app.use("/clients", clientRoutes);
+app.use("/users", userRoutes);
 app.use("/availabletimes", availableTimesRoutes);
 // app.use("/clients", authenticateJWT, salesRoutes);
 // app.use("/appointments", authenticateJWT, countersRoutes);

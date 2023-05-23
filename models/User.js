@@ -1,7 +1,15 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
-const clientSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
+  number: {
+    type: Number,
+  },
+  role: {
+    type: String,
+    enum: ["admin", "client"],
+    required: [true, "Type of appointment is required."],
+  },
   firstName: {
     type: String,
     required: [true, "First name is required."],
@@ -59,7 +67,7 @@ const clientSchema = new mongoose.Schema({
 });
 
 // Method to generate a random password
-clientSchema.statics.generateRandomPassword = function () {
+userSchema.statics.generateRandomPassword = function () {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   const passwordLength = 8;
@@ -74,7 +82,7 @@ clientSchema.statics.generateRandomPassword = function () {
 };
 
 // Pre-save middleware to hash the password
-clientSchema.pre("save", async function (next) {
+userSchema.pre("save", async function (next) {
   try {
     // Generate a random password if not provided
     if (!this.password) {
@@ -91,6 +99,6 @@ clientSchema.pre("save", async function (next) {
   }
 });
 
-const Client = mongoose.model("Client", clientSchema);
+const User = mongoose.model("User", userSchema);
 
-module.exports = Client;
+module.exports = User;

@@ -1,35 +1,43 @@
 const express = require("express");
 const router = express.Router();
-const Client = require("../../models/Client");
+const User = require("../../models/User");
 const Appointment = require("../../models/Appointment");
 const Payment = require("../../models/Payment");
+const getNextSequenceValue = require("../../middleware/getCounter");
 
-// Create a client, appointment, and payment
+// Create a user, appointment, and payment
 router.post("/", async (req, res) => {
   console.log(req.body);
   try {
-    // Extract client data from the request body
+    // Extract user data from the request body
     const { firstName, lastName, phoneNumber, email } = req.body[0];
 
-    // Create a new client instance
-    const client = new Client({
+    const nextSequenceValue = await getNextSequenceValue("users");
+
+    // Create a new user instance
+    const user = new User({
+      number: nextSequenceValue,
       firstName,
       lastName,
       phoneNumber,
       email,
-      password: Client.generateRandomPassword(),
+      role: "client",
+      password: user.generateRandomPassword(),
     });
 
-    // Save the new client to the database
-    const savedClient = await client.save(); // podria no guardar el client en una variable para no tener la clave
+    // Save the new user to the database
+    const saveduser = await user.save(); // podria no guardar el user en una variable para no tener la clave
 
     // Extract payment data from the request body
     const { amount, transactionNumber } = req.body[1];
 
+    nextSequenceValue = await getNextSequenceValue("payments");
+
     // Create a new payment instance
     const payment = new Payment({
+      number: nextSequenceValue,
       amount,
-      client: savedClient._id,
+      user: saveduser._id,
       transactionNumber,
     });
 
@@ -39,15 +47,15 @@ router.post("/", async (req, res) => {
     // Extract appointment data from the request body
     const { time, date, typeOfAppointment } = req.body[1];
 
-    // date = new Date(date);
-    // typeOfAppointment = parseInt(typeOfAppointment);
+    nextSequenceValue = await getNextSequenceValue("appointments");
 
     // Create a new appointment instance
     const appointment = new Appointment({
+      number: nextSequenceValue,
       time,
       date,
       typeOfAppointment,
-      client: savedClient._id,
+      user: saveduser._id,
       payment: savedPayment._id,
     });
 
@@ -56,10 +64,10 @@ router.post("/", async (req, res) => {
     const savedAppointment = await appointment.save();
 
     res.status(201).json({
-      client: {
-        firstName: savedClient.firstName,
-        lastName: savedClient.lastName,
-        email: savedClient.email,
+      user: {
+        firstName: saveduser.firstName,
+        lastName: saveduser.lastName,
+        email: saveduser.email,
       },
       appointment: savedAppointment,
       payment: savedPayment,
