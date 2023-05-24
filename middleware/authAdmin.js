@@ -11,12 +11,23 @@ function authenticateJWT(req, res, next) {
   }
 
   const token = authHeader.split(" ")[1];
-  jwt.verify(token, JWT_SECRET, (error, user) => {
+  jwt.verify(token, JWT_SECRET, (error, decoded) => {
     if (error) {
       return res.status(403).send({ message: "Failed to authenticate token" });
     }
 
-    req.user = user;
+    const { _id, role } = decoded;
+
+    if (role === "admin") {
+      console.log("the user is an Admin");
+    }
+
+    if (role !== "admin") {
+      return res
+        .status(403)
+        .send({ message: "User is not admin, cannot access this route" });
+    }
+
     next();
   });
 }

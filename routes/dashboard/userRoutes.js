@@ -3,10 +3,14 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const User = require("../../models/User");
 
+router.get("/", async (req, res) => {
+  res.status(200).json({ message: "it is protected!" });
+});
+
 // Create a new client
 router.post("/", async (req, res) => {
   try {
-    const { firstName, lastName, phoneNumber, email } = req.body;
+    const { firstName, lastName, phoneNumber, email, password } = req.body;
 
     // Create a new client instance
     const newClient = new User({
@@ -14,7 +18,9 @@ router.post("/", async (req, res) => {
       lastName,
       phoneNumber,
       email,
-      password: User.generateRandomPassword(),
+      role: "admin",
+      password,
+      // password: User.generateRandomPassword(),
     });
 
     // Save the new client to the database

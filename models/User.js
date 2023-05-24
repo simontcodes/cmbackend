@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema({
   number: {
@@ -79,6 +80,19 @@ userSchema.statics.generateRandomPassword = function () {
   }
 
   return generatedPassword;
+};
+
+userSchema.methods.login = async function (password) {
+  console.log(password, this.password);
+  const isPasswordValid = await bcrypt.compare(password, this.password);
+  if (!isPasswordValid) return Promise.reject(new Error("Invalid password"));
+
+  const payload = { _id: this._id, role: this.role };
+  console.log(payload);
+
+  return jwt.sign(payload, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  });
 };
 
 // Pre-save middleware to hash the password

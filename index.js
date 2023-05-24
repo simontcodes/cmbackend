@@ -4,7 +4,8 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const cors = require("cors");
 
-const authenticateJWT = require("./middleware/auth");
+const authenticateAdmin = require("./middleware/authAdmin");
+const authenticateClient = require("./middleware/authClient");
 
 const app = express();
 
@@ -24,6 +25,7 @@ const appointmentRoutes = require("./routes/dashboard/appointmentRoutes.js");
 const paymentRoutes = require("./routes/dashboard/paymentRoutes.js");
 const firstAppointmentRoutes = require("./routes/landing/firstAppointmentRoutes.js");
 const availableTimesRoutes = require("./routes/landing/availableTimesRoutes");
+const loginRoutes = require("./routes/dashboard/loginRoutes");
 
 // const countersRoutes = require("./routes/counterRoutes.js"); // do i need counters?
 
@@ -33,9 +35,13 @@ app.use(morgan("tiny"));
 app.use(cors());
 
 // Routes
+//Landing page routes
 app.use("/firstAppointment", firstAppointmentRoutes);
-app.use("/users", userRoutes);
 app.use("/availabletimes", availableTimesRoutes);
+
+//Dashboard routes
+app.use("/login", loginRoutes);
+app.use("/users", authenticateAdmin, userRoutes);
 // app.use("/clients", authenticateJWT, salesRoutes);
 // app.use("/appointments", authenticateJWT, countersRoutes);
 // app.use("/category", authenticateJWT, categoriesRoutes);
