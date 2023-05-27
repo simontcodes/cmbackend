@@ -3,11 +3,22 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const User = require("../../models/User");
 
-router.get("/", async (req, res) => {
-  res.status(200).json({ message: "it is protected!" });
+// GET route to retrieve client users
+router.get("/", (req, res) => {
+  User.find({ role: "client" })
+    .then((clients) => {
+      res.status(200).json(clients);
+    })
+    .catch((error) => {
+      console.error("Error retrieving users:", error);
+      res
+        .status(500)
+        .json({ error: "An error occurred while retrieving users" });
+    });
 });
 
 // Create a new client
+//dont know if i shoul keep this route yet
 router.post("/", async (req, res) => {
   try {
     const { firstName, lastName, phoneNumber, email, password } = req.body;
@@ -18,7 +29,7 @@ router.post("/", async (req, res) => {
       lastName,
       phoneNumber,
       email,
-      role: "admin",
+      role: "client",
       password,
       // password: User.generateRandomPassword(),
     });

@@ -41,7 +41,9 @@ app.use("/availabletimes", availableTimesRoutes);
 
 //Dashboard routes
 app.use("/login", loginRoutes);
+// app.use("/users", userRoutes);
 app.use("/users", authenticateAdmin, userRoutes);
+
 // app.use("/clients", authenticateJWT, salesRoutes);
 // app.use("/appointments", authenticateJWT, countersRoutes);
 // app.use("/category", authenticateJWT, categoriesRoutes);
