@@ -65,6 +65,50 @@ const userSchema = new mongoose.Schema({
       ref: "Appointment",
     },
   ],
+  clientInfo: {
+    educationLevel: {
+      type: String,
+    },
+    isMarried: {
+      type: Boolean,
+    },
+    hasBeenInCanada: {
+      type: Boolean,
+    },
+    hasEnglishTest: {
+      type: Boolean,
+    },
+    englishTest: {
+      type: String,
+      enum: ["ILTS", "TOEFL"],
+    },
+    englishTestScore: {
+      readingScore: {
+        type: Number,
+      },
+      writingScore: {
+        type: Number,
+      },
+      listeningScore: {
+        type: Number,
+      },
+      speakingScore: {
+        type: Number,
+      },
+    },
+    jobExperience: [
+      {
+        workExp: {
+          jobTitle: {
+            type: String,
+          },
+          yearsOfExp: {
+            type: Number,
+          },
+        },
+      },
+    ],
+  },
 });
 
 // Method to generate a random password
