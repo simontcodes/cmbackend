@@ -17,6 +17,27 @@ router.get("/", (req, res) => {
     });
 });
 
+//get a client by id
+router.get("/client/:id", (req, res) => {
+  console.log("is params getting here?", req.params.id);
+  User.findById(req.params.id)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      if (user.role !== "client") {
+        return res.status(403).json({ error: "Unauthorized" }); // no lo se rick
+      }
+
+      res.status(200).json(user);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    });
+});
+
 // Create a new client
 //dont know if i shoul keep this route yet
 router.post("/", async (req, res) => {
