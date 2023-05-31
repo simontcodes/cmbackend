@@ -1,6 +1,5 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
-// const faker = require("faker");
 const { faker } = require("@faker-js/faker");
 const User = require("../models/User");
 

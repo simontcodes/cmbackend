@@ -23,6 +23,18 @@ const appointmentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Payment",
   },
+  createdAt: {
+    required: [true, "createdAt is required."],
+    type: Date,
+    default: Date.now,
+    immutable: true,
+  },
+  status: {
+    type: String,
+    required: [true, "Status is required."],
+    enum: ["upcoming", "completed", "cancelled"],
+    default: "upcoming",
+  },
 });
 
 const Appointment = mongoose.model("Appointment", appointmentSchema);

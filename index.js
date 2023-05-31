@@ -43,9 +43,8 @@ app.use("/availabletimes", availableTimesRoutes);
 app.use("/login", loginRoutes);
 // app.use("/users", userRoutes);
 app.use("/users", authenticateAdmin, userRoutes);
-
+app.use("/appointments", authenticateAdmin, appointmentRoutes);
 // app.use("/clients", authenticateJWT, salesRoutes);
-// app.use("/appointments", authenticateJWT, countersRoutes);
 // app.use("/category", authenticateJWT, categoriesRoutes);
 // app.use("/admin", adminsRoutes);
 app.use(express.static(__dirname));
