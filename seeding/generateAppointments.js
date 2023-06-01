@@ -21,8 +21,8 @@ const generateAppointment = () => {
   const time = faker.helpers.arrayElement(['09:00', '10:00', '11:00', '12:00']);
   const date = faker.date.future();
   const typeOfAppointment = faker.number.int({ min: 1, max: 3 });
-  const client = faker.helpers.arrayElement(clientIds);
-//   const payment = null; // Assuming no payment information for now
+  const client = { id: faker.helpers.arrayElement(clientIds),
+    fullName: `${faker.person.firstName()} ${faker.person.lastName()} `}
 
   return {
     time,

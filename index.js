@@ -44,6 +44,7 @@ app.use("/login", loginRoutes);
 // app.use("/users", userRoutes);
 app.use("/users", authenticateAdmin, userRoutes);
 app.use("/appointments", authenticateAdmin, appointmentRoutes);
+app.use("/payments", authenticateAdmin, paymentRoutes);
 // app.use("/clients", authenticateJWT, salesRoutes);
 // app.use("/category", authenticateJWT, categoriesRoutes);
 // app.use("/admin", adminsRoutes);

@@ -9,9 +9,26 @@ const paymentSchema = new mongoose.Schema({
     type: String,
   },
   client: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Client",
-    required: [true, "Client is required."],
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Client",
+      required: [true, "Client ID is required."],
+    },
+    fullName: {
+      type: String,
+      required: [true, "Client full name is required."],
+    },
+  },
+  createdAt: {
+    required: [true, "createdAt is required."],
+    type: Date,
+    default: Date.now,
+    immutable: true,
+  },
+  paymentSource: {
+    type: String,
+    required: [true, "paymentSource is required."],
+    enum: ["square", "paypal"],
   },
 });
 
