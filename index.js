@@ -20,9 +20,9 @@ db.once("open", function () {
   console.log("Connected to MongoDB");
 });
 
-const userRoutes = require("./routes/dashboard/userRoutes.js");
-const appointmentRoutes = require("./routes/dashboard/appointmentRoutes.js");
-const paymentRoutes = require("./routes/dashboard/paymentRoutes.js");
+const userRoutes = require("./routes/dashboard/admin/userRoutes.js");
+const appointmentRoutes = require("./routes/dashboard/admin/appointmentRoutes.js");
+const paymentRoutes = require("./routes/dashboard/admin/paymentRoutes.js");
 const firstAppointmentRoutes = require("./routes/landing/firstAppointmentRoutes.js");
 const availableTimesRoutes = require("./routes/landing/availableTimesRoutes");
 const loginRoutes = require("./routes/dashboard/loginRoutes");
