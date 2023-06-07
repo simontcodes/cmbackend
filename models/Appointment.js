@@ -10,8 +10,12 @@ const appointmentSchema = new mongoose.Schema({
     required: [true, "Date is required."],
   },
   typeOfAppointment: {
-    type: Number,
-    enum: [1, 2, 3],
+    type: String,
+    enum: [
+      "Initial consultation",
+      "One hour Consultation",
+      "Two hour Consultation",
+    ],
     required: [true, "Type of appointment is required."],
   },
   client: {
@@ -40,6 +44,10 @@ const appointmentSchema = new mongoose.Schema({
     required: [true, "Status is required."],
     enum: ["upcoming", "completed", "cancelled"],
     default: "upcoming",
+  },
+  googleCalendar: {
+    link: { type: String },
+    eventId: { type: String },
   },
 });
 
