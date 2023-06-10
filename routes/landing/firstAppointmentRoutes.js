@@ -90,7 +90,6 @@ const Payment = require("../../models/Payment");
 const { google } = require("googleapis");
 // Provide the required configuration
 const CREDENTIALS = JSON.parse(process.env.CREDENTIALS);
-const calendarId = process.env.CALENDAR_ID;
 
 // Google calendar API settings
 const SCOPES = "https://www.googleapis.com/auth/calendar";
@@ -104,7 +103,7 @@ const auth = new google.auth.JWT(
 );
 
 function calculateEndTime(time) {
-  const newTime = (parseInt(time.slice(0, -6)) + 1).toString() + ":00:00-04:00";
+  const newTime = (parseInt(time.slice(0, -3)) + 1).toString() + ":00:00-04:00";
   return newTime;
 }
 
@@ -153,10 +152,12 @@ router.post("/", async (req, res) => {
 
     // Extract appointment data from the request body
     const { time, date, typeOfAppointment } = req.body[1];
-
+    console.log(time);
     // Call Google Calendar API to create an appointment
-    const startTime = time.slice(0, -6) + ":00:00-04:00";
+    const startTime = time.slice(0, -3) + ":00:00-04:00";
+    console.log(startTime);
     const endTime = calculateEndTime(time);
+    console.log(endTime);
     const googleDate = date.slice(0, -14);
 
     const calendarResponse = await calendar.events.insert({
@@ -174,9 +175,6 @@ router.post("/", async (req, res) => {
         },
       },
     });
-
-    console.log(calendarResponse.status);
-    console.log(calendarResponse.data.htmlLink);
 
     // Check if the event was created successfully
     if (calendarResponse.status === 200) {

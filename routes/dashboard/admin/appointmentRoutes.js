@@ -1,6 +1,20 @@
+require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const Appointment = require("../../../models/Appointment");
+const { google } = require("googleapis");
+
+// Google calendar API settings
+const CREDENTIALS = JSON.parse(process.env.CREDENTIALS);
+const SCOPES = "https://www.googleapis.com/auth/calendar";
+const calendar = google.calendar({ version: "v3" });
+
+const auth = new google.auth.JWT(
+  CREDENTIALS.client_email,
+  null,
+  CREDENTIALS.private_key,
+  SCOPES
+);
 
 // Route to get all appointments
 router.get("/", async (req, res) => {
@@ -37,10 +51,18 @@ router.patch("/cancel/:id", async (req, res) => {
       // Update the appointment status to "cancelled"
       appointment.status = "cancelled";
 
-      // Save the updated appointment
-      await appointment.save();
+      //delete event from G Calendar
+      const calendarResponse = await calendar.events.delete({
+        auth: auth,
+        calendarId: process.env.CALENDAR_ID,
+        eventId: appointment.googleCalendar.eventId,
+      });
 
-      res.status(200).json({ message: "Appointment cancelled successfully" });
+      if (calendarResponse.status === 200) {
+        // Save the updated appointment
+        await appointment.save();
+        res.status(200).json({ message: "Appointment cancelled successfully" });
+      }
     } else {
       res.status(400).json({ error: "Cannot cancel appointment" });
     }

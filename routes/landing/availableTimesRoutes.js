@@ -10,14 +10,14 @@ router.get("/:date", async (req, res) => {
     const existingAppointments = await Appointment.find({ date });
 
     const allTimes = [
-      "10:00am",
-      "11:00am",
-      "12:00pm",
-      "01:00pm",
-      "02:00pm",
-      "03:00pm",
-      "04:00pm",
-      "05:00pm",
+      "10:00",
+      "11:00",
+      "12:00",
+      "13:00",
+      "14:00",
+      "15:00",
+      "16:00",
+      "17:00",
     ];
 
     const takenTimes = existingAppointments.map(
