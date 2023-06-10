@@ -46,10 +46,20 @@ const generateAppointment = () => {
     "16:00",
     "17:00",
   ]);
-  const date = faker.date.between({
-    from: "2023-06-06T00:00:00.000Z",
-    to: "2023-10-31T00:00:00.000Z",
-  });
+  // const date = faker.date.between({
+  //   from: "2023-06-06T00:00:00.000Z",
+  //   to: "2023-10-31T00:00:00.000Z",
+  // });
+
+  // Generate a random weekday date within the specified range
+  const fromDate = new Date("2023-06-06T00:00:00.000Z");
+  const toDate = new Date("2023-10-31T00:00:00.000Z");
+  let date = faker.date.between(fromDate, toDate);
+
+  // Loop until a weekday date is generated
+  while (date.getDay() === 0 || date.getDay() === 6) {
+    date = faker.date.between(fromDate, toDate);
+  }
   const typeOfAppointment = faker.helpers.arrayElement([
     "Initial consultation",
     "One hour Consultation",
@@ -59,12 +69,17 @@ const generateAppointment = () => {
     id: faker.helpers.arrayElement(clientIds),
     fullName: `${faker.person.firstName()} ${faker.person.lastName()} `,
   };
+  const googleCalendar = {
+    link: "this is where the link would go",
+    eventId: faker.string.uuid(),
+  };
 
   return {
     time,
     date,
     typeOfAppointment,
     client,
+    googleCalendar,
     // payment,
   };
 };

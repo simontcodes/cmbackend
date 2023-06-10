@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+require("./utils/CronJobs/appointmentScheduler");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const cors = require("cors");

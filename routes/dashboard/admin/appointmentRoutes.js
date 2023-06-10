@@ -20,4 +20,33 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Route to cancel an appointment
+router.patch("/cancel/:id", async (req, res) => {
+  const appointmentId = req.params.id;
+
+  try {
+    // Find the appointment by ID
+    const appointment = await Appointment.findById(appointmentId);
+
+    if (!appointment) {
+      return res.status(404).json({ error: "Appointment not found" });
+    }
+
+    // Check if the appointment status is "upcoming"
+    if (appointment.status === "upcoming") {
+      // Update the appointment status to "cancelled"
+      appointment.status = "cancelled";
+
+      // Save the updated appointment
+      await appointment.save();
+
+      res.status(200).json({ message: "Appointment cancelled successfully" });
+    } else {
+      res.status(400).json({ error: "Cannot cancel appointment" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to cancel appointment" });
+  }
+});
+
 module.exports = router;
