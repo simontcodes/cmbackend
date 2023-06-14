@@ -8,7 +8,6 @@ router.get("/:date", async (req, res) => {
 
   try {
     const existingAppointments = await Appointment.find({ date });
-
     const allTimes = [
       "10:00",
       "11:00",
