@@ -64,4 +64,27 @@ router.post("/", async (req, res) => {
   }
 });
 
+//client documents route
+router.get("/documents/:userId", (req, res) => {
+  const userId = req.params.userId;
+  const containerName = "files";
+
+  blobService.listBlobsSegmentedWithPrefix(
+    containerName,
+    userId,
+    null,
+    (error, result) => {
+      if (error) {
+        console.error("Error retrieving documents:", error);
+        return res
+          .status(500)
+          .json({ message: "Failed to retrieve documents" });
+      }
+
+      const documents = result.entries.map((entry) => entry.name);
+      return res.status(200).json({ documents });
+    }
+  );
+});
+
 module.exports = router;

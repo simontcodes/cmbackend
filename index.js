@@ -27,6 +27,7 @@ const paymentRoutes = require("./routes/dashboard/admin/paymentRoutes.js");
 const firstAppointmentRoutes = require("./routes/landing/firstAppointmentRoutes.js");
 const availableTimesRoutes = require("./routes/landing/availableTimesRoutes");
 const loginRoutes = require("./routes/dashboard/loginRoutes");
+const clientRoutes = require("./routes/dashboard/client/clientRoutes");
 
 // const countersRoutes = require("./routes/counterRoutes.js"); // do i need counters?
 
@@ -42,13 +43,12 @@ app.use("/availabletimes", availableTimesRoutes);
 
 //Dashboard routes
 app.use("/login", loginRoutes);
-// app.use("/users", userRoutes);
+
 app.use("/users", authenticateAdmin, userRoutes);
 app.use("/appointments", authenticateAdmin, appointmentRoutes);
 app.use("/payments", authenticateAdmin, paymentRoutes);
-// app.use("/clients", authenticateJWT, salesRoutes);
-// app.use("/category", authenticateJWT, categoriesRoutes);
-// app.use("/admin", adminsRoutes);
+// app.use("/clients", clientRoutes);
+
 app.use(express.static(__dirname));
 
 //backend home
