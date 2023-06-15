@@ -2,6 +2,8 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 
+//this middleware authenticate both types of user
+
 function authenticateJWT(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
@@ -17,6 +19,7 @@ function authenticateJWT(req, res, next) {
     }
 
     const { _id, role } = decoded;
+    req.userId = _id; // Attach _id to the req object
 
     next();
   });

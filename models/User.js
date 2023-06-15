@@ -53,6 +53,10 @@ const userSchema = new mongoose.Schema({
       message: "Password must be at least 6 characters long.",
     },
   },
+  hasChangedPassword: {
+    type: Boolean,
+    default: false,
+  },
   payments: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -137,6 +141,12 @@ userSchema.methods.login = async function (password) {
   return jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: "1h",
   });
+};
+
+userSchema.methods.changePassword = async function (newPassword) {
+  this.password = newPassword;
+  this.hasChangedPassword = true;
+  await this.save();
 };
 
 // Pre-save middleware to hash the password

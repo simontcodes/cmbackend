@@ -6,7 +6,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 
 const authenticateAdmin = require("./middleware/authAdmin");
-const authenticateClient = require("./middleware/authClient");
+const authenticate = require("./middleware/auth");
 
 const app = express();
 

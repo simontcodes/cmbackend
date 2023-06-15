@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+
 // const multer = require('multer');
 // const azure = require('azure-storage');
 
@@ -33,6 +34,7 @@ const router = express.Router();
 //   );
 // });
 
+//client upload file
 router.post("/upload", (req, res) => {
   console.log("this will be the upload route");
 });
