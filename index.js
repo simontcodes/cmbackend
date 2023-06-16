@@ -47,6 +47,7 @@ app.use("/login", loginRoutes);
 app.use("/users", authenticateAdmin, userRoutes);
 app.use("/appointments", authenticateAdmin, appointmentRoutes);
 app.use("/payments", authenticateAdmin, paymentRoutes);
+app.use("/client", authenticate, clientRoutes);
 // app.use("/clients", clientRoutes);
 
 app.use(express.static(__dirname));

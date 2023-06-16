@@ -19,6 +19,7 @@ function authenticateJWT(req, res, next) {
     }
 
     const { _id, role } = decoded;
+    console.log(role);
     req.userId = _id; // Attach _id to the req object
 
     next();
