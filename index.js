@@ -24,7 +24,7 @@ db.once("open", function () {
 const userRoutes = require("./routes/dashboard/admin/userRoutes.js");
 const appointmentRoutes = require("./routes/dashboard/admin/appointmentRoutes.js");
 const paymentRoutes = require("./routes/dashboard/admin/paymentRoutes.js");
-const firstAppointmentRoutes = require("./routes/landing/firstAppointmentRoutes.js");
+const bookingRoutes = require("./routes/landing/bookingRoutes.js");
 const availableTimesRoutes = require("./routes/landing/availableTimesRoutes");
 const loginRoutes = require("./routes/dashboard/loginRoutes");
 const clientRoutes = require("./routes/dashboard/client/clientRoutes");
@@ -33,12 +33,12 @@ const clientRoutes = require("./routes/dashboard/client/clientRoutes");
 
 // Middleware
 app.use(express.json());
-app.use(morgan("tiny"));
+app.use(morgan("dev"));
 app.use(cors());
 
 // Routes
 //Landing page routes
-app.use("/firstAppointment", firstAppointmentRoutes);
+app.use("/booking", bookingRoutes);
 app.use("/availabletimes", availableTimesRoutes);
 
 //Dashboard routes

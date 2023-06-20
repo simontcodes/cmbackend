@@ -21,6 +21,7 @@
     "mongoose": "^7.1.1",
     "morgan": "^1.10.0",
     "node-cron": "^3.0.2",
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "square": "^28.0.1"
   }
 }

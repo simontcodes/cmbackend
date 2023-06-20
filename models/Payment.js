@@ -6,7 +6,7 @@ const paymentSchema = new mongoose.Schema({
     required: [true, "Amount is required."],
   },
   transactionNumber: {
-    type: String,
+    type: String, //this is orderId coming from square
   },
   client: {
     id: {
@@ -29,6 +29,12 @@ const paymentSchema = new mongoose.Schema({
     type: String,
     required: [true, "paymentSource is required."],
     enum: ["square", "paypal"],
+  },
+  status: {
+    type: String,
+    required: [true, "status is required."],
+    enum: ["pending", "completed", "rejected"],
+    default: "pending",
   },
 });
 
