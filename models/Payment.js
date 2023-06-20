@@ -19,6 +19,10 @@ const paymentSchema = new mongoose.Schema({
       required: [true, "Client full name is required."],
     },
   },
+  appointment: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Appointment",
+  },
   createdAt: {
     required: [true, "createdAt is required."],
     type: Date,
@@ -33,8 +37,8 @@ const paymentSchema = new mongoose.Schema({
   status: {
     type: String,
     required: [true, "status is required."],
-    enum: ["pending", "completed", "rejected"],
-    default: "pending",
+    enum: ["PENDING", "COMPLETED", "REJECTED"],
+    default: "PENDING",
   },
 });
 

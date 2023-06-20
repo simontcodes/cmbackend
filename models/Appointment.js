@@ -42,8 +42,8 @@ const appointmentSchema = new mongoose.Schema({
   status: {
     type: String,
     required: [true, "Status is required."],
-    enum: ["pending", "upcoming", "completed", "cancelled"],
-    default: "pending",
+    enum: ["PENDING", "UPCOMING", "COMPLETED", "CANCELLED"],
+    default: "PENDING",
   },
   googleCalendar: {
     link: { type: String },
