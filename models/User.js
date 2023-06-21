@@ -44,7 +44,6 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, "Password is required."],
     validate: {
       validator: function (value) {
         // Validate password length (at least 6 characters)
@@ -116,7 +115,7 @@ const userSchema = new mongoose.Schema({
 });
 
 // Method to generate a random password
-userSchema.statics.generateRandomPassword = function () {
+userSchema.methods.generateRandomPassword = function () {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   const passwordLength = 8;
@@ -141,6 +140,17 @@ userSchema.methods.login = async function (password) {
   return jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: "1h",
   });
+};
+
+//this method is use to send the email to the user
+userSchema.methods.decryptPassword = async function (encryptedPassword) {
+  try {
+    const decryptedPassword = await bcrypt.compare(encryptedPassword, "");
+
+    return decryptedPassword;
+  } catch (error) {
+    throw new Error("Error decrypting password: " + error.message);
+  }
 };
 
 userSchema.methods.changePassword = async function (newPassword) {

@@ -9,6 +9,9 @@ const { Client, Environment } = require("square");
 const SCOPES = "https://www.googleapis.com/auth/calendar";
 const calendar = google.calendar({ version: "v3" });
 const CREDENTIALS = JSON.parse(process.env.CREDENTIALS);
+const sgMail = require("@sendgrid/mail");
+
+sgMail.setApiKey(`${process.env.SENDGRID_API_KEY}`);
 
 // Square API settings
 const squareClient = new Client({
@@ -41,7 +44,6 @@ router.post("/", async (req, res) => {
       phoneNumber,
       email,
       role: "client",
-      password: User.generateRandomPassword(),
     });
 
     // Extract appointment data from the request body
@@ -68,8 +70,10 @@ router.post("/", async (req, res) => {
           amount: 10000,
           currency: "CAD",
         },
-        redirect_url: `http://localhost:3000/payment`,
         locationId: process.env.SQUARE_LOCATION_ID,
+      },
+      checkoutOptions: {
+        redirect_url: "http://localhost:3000/payment",
       },
     });
 
@@ -164,17 +168,49 @@ router.post("/square-webhook", async (req, res) => {
     const appointment = await Appointment.findOne({
       payment: payment._id,
     });
+    const user = await User.findById(appointment.client.id);
 
-    if (payment && appointment) {
-      console.log("Payment found:", payment);
+    if (payment && appointment && user) {
       // Process the payment or perform relevant actions
       if (event.data.object.payment.status === "COMPLETED") {
         payment.status = "COMPLETED";
         appointment.status = "UPCOMING";
 
-        console.log(payment.status);
-        console.log(appointment.status);
-      } else if (event.data.object.payment.status === "REJECTED") {
+        const tempPassword = user.generateRandomPassword();
+        //we use assign a password to the user
+        user.password = tempPassword;
+        await user.save();
+
+        const emailContent = `
+        
+  <p>Hello,${user.firstName} ${user.lastName} </p>
+  <p>Thank you for your payment.</p>
+  <p>Your appointment for ${appointment.typeOfAppointment} on ${appointment.date} at ${appointment.time} has been confirmed!</p>
+  <p>Please log in our portal to fill out the form before the appointment using your email and this temporary password: ${tempPassword}</p>
+  <p></p>
+  <p></p>
+
+  <p>Click the button below to visit our website:</p>
+  <a href="http://localhost:5173" style="display: inline-block; background-color: #0088cc; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 4px;">Visit Website</a>
+  <p>Best regards,</p>
+  <p>CM Immigration</p>
+`;
+
+        const msg = {
+          to: user.email,
+          from: "simont.codes@gmail.com",
+          subject: "CMI | Appointment Confirmation",
+          html: emailContent,
+        };
+
+        try {
+          await sgMail.send(msg);
+          console.log("Email sent");
+        } catch (error) {
+          console.error("Error sending email:", error);
+          // Handle the error
+        }
+      } else if (event.data.object.payment.status === "CANLELED" || "FAILED") {
         payment.status = "REJECTED";
         appointment.status = "CANCELLED";
 
