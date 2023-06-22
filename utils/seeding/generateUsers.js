@@ -1,7 +1,8 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 const { faker } = require("@faker-js/faker");
-const User = require("../models/User");
+const User = require("../../models/User");
+const fs = require("fs");
 
 // Connect to MongoDB
 mongoose.connect(process.env.DB_CONNECTOR, { useNewUrlParser: true });
@@ -54,10 +55,19 @@ const generateUser = () => {
 // Generate 15 users
 async function generateUsers() {
   try {
+    const users = [];
     for (let i = 0; i < 15; i++) {
-      await generateUser();
+      const user = await generateUser();
+      users.push(user);
     }
     console.log("Users created successfully!");
+
+    // Write users to a JSON file
+    const jsonUsers = JSON.stringify(users);
+    fs.writeFile("users.json", jsonUsers, (err) => {
+      if (err) throw err;
+      console.log("Users saved to users.json");
+    });
   } catch (error) {
     console.error("Error generating users:", error);
   } finally {
