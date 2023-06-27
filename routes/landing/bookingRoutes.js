@@ -90,31 +90,6 @@ router.post("/", async (req, res) => {
 
     const checkoutUrl = response.result.paymentLink.url; //this is the link the user will be redirected to
 
-    // Call Google Calendar API to create an appointment
-    const startTime = time.slice(0, -3) + ":00:00-04:00";
-    const endTime = calculateEndTime(time);
-    const googleDate = date.slice(0, -14);
-
-    const calendarResponse = await calendar.events.insert({
-      auth: auth,
-      calendarId: process.env.CALENDAR_ID,
-      requestBody: {
-        summary: `${typeOfAppointment} for ${user.firstName} ${user.lastName}`,
-        start: {
-          dateTime: `${googleDate}T${startTime}`,
-          timeZone: "America/Toronto",
-        },
-        end: {
-          dateTime: `${googleDate}T${endTime}`,
-          timeZone: "America/Toronto",
-        },
-      },
-    });
-
-    if (calendarResponse.status !== 200) {
-      throw new Error("Failed to create the appointment in Google Calendar.");
-    }
-
     // Create a new appointment instance
     const appointment = new Appointment({
       time,
@@ -125,10 +100,6 @@ router.post("/", async (req, res) => {
         fullName: `${user.firstName} ${user.lastName}`,
       },
       payment: payment._id,
-      googleCalendar: {
-        link: calendarResponse.data.htmlLink,
-        eventId: calendarResponse.data.id,
-      },
     });
 
     //here we add the appointment id to be able to change appointment status in the webhook route
@@ -210,6 +181,48 @@ router.post("/square-webhook", async (req, res) => {
           console.error("Error sending email:", error);
           // Handle the error
         }
+
+        // Call Google Calendar API to create an appointment
+        const startTime = appointment.time.slice(0, -3) + ":00:00-04:00";
+        const endTime = calculateEndTime(appointment.time);
+
+        const year = appointment.date.getFullYear();
+        const month = String(appointment.date.getMonth() + 1).padStart(2, "0");
+        const day = String(appointment.date.getDate()).padStart(2, "0");
+        const googleDate = `${year}-${month}-${day}`;
+
+        const calendarResponse = await calendar.events.insert({
+          auth: auth,
+          calendarId: process.env.CALENDAR_ID,
+          requestBody: {
+            summary: `${appointment.typeOfAppointment} for ${user.firstName} ${user.lastName}`,
+            start: {
+              dateTime: `${googleDate}T${startTime}`,
+              timeZone: "America/Toronto",
+            },
+            end: {
+              dateTime: `${googleDate}T${endTime}`,
+              timeZone: "America/Toronto",
+            },
+          },
+        });
+
+        if (calendarResponse.status === 200) {
+          console.log("calendar event added", calendarResponse.status);
+        }
+
+        if (calendarResponse.status !== 200) {
+          throw new Error(
+            "Failed to create the appointment in Google Calendar."
+          );
+        }
+
+        appointment.googleCalendar = {
+          link: calendarResponse.data.htmlLink,
+          eventId: calendarResponse.data.id,
+        };
+
+        await appointment.save();
       } else if (event.data.object.payment.status === "CANLELED" || "FAILED") {
         payment.status = "REJECTED";
         appointment.status = "CANCELLED";

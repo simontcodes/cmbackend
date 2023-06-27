@@ -37,21 +37,23 @@ router.get("/", async (req, res) => {
 // Route to cancel an appointment
 router.patch("/cancel/:id", async (req, res) => {
   const appointmentId = req.params.id;
+  console.log(appointmentId);
 
   try {
     // Find the appointment by ID
     const appointment = await Appointment.findById(appointmentId);
+    console.log(appointment);
 
     if (!appointment) {
       return res.status(404).json({ error: "Appointment not found" });
     }
 
     // Check if the appointment status is "upcoming"
-    if (appointment.status === "upcoming") {
+    if (appointment.status === "UPCOMING") {
       // Update the appointment status to "cancelled"
-      appointment.status = "cancelled";
+      appointment.status = "CANCELLED";
 
-      //delete event from G Calendar
+      // delete event from G Calendar
       const calendarResponse = await calendar.events.delete({
         auth: auth,
         calendarId: process.env.CALENDAR_ID,
