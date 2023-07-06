@@ -34,6 +34,38 @@ router.get("/profile/", async (req, res) => {
   }
 });
 
+router.post("/form-data", async (req, res) => {
+  console.log(req.body);
+  try {
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    user.clientInfo.educationLevel = req.body.answers[0].value;
+    user.clientInfo.nationality = req.body.answers[1].value;
+    if (req.body.answers[3].value !== "Single") {
+      user.clientInfo.isMarried = true;
+    } else {
+      user.clientInfo.isMarried = false;
+    }
+
+    if (req.body.answers[2].value !== "I havent been to Canada before") {
+      user.clientInfo.hasBeenInCanada = true;
+    } else {
+      user.clientInfo.hasBeenInCanada = false;
+    }
+
+    user.save();
+
+    res.status(200).json({ message: "Data submited successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 // router.post("/upload", upload.single("file"), (req, res) => {
 //   const file = req.file;
 

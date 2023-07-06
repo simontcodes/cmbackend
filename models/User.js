@@ -52,9 +52,6 @@ const userSchema = new mongoose.Schema({
       message: "Password must be at least 6 characters long.",
     },
   },
-  nationality: {
-    type: String,
-  },
   hasChangedPassword: {
     type: Boolean,
     default: false,
@@ -73,6 +70,9 @@ const userSchema = new mongoose.Schema({
   ],
   clientInfo: {
     educationLevel: {
+      type: String,
+    },
+    nationality: {
       type: String,
     },
     isMarried: {
